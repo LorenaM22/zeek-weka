@@ -1,6 +1,4 @@
-Extraido del repositorio dgunter/ParseZeekLogs, al que se le ha realizado una modificación en el fichero Examples/zeek_to_csv.py para incluir nuestros campos de interes
-obtenidos por zeek.
-Dentro de examples se encuentra ya un ejemplo realizado: el conn.log está parseado en out.csv con formato csv.
+Extraido del repositorio dgunter/ParseZeekLogs, al que se le ha realizado una modificación en el fichero examples/zeek_to_csv.py para incluir nuestros campos de interes obtenidos por zeek. Dentro de examples se encuentra ya un ejemplo realizado: el conn.log está parseado en out.csv con formato csv.
 
 Primero descargamos el repositorio en un directorio conocido por ejemplo en /root, con el siguiente comadno: git clone https://github.com/LorenaM22/zeek-weka.git
 Así nos aparecerá en él un nuevo directorio llamado zeek-weka.
