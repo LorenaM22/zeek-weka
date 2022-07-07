@@ -1,6 +1,6 @@
 Extraido del repositorio dgunter/ParseZeekLogs, al que se le ha realizado una modificación en el fichero examples/zeek_to_csv.py para incluir nuestros campos de interes obtenidos por zeek. Dentro de examples se encuentra ya un ejemplo realizado: el conn.log está parseado en out.csv con formato csv.
 
-Primero descargamos el repositorio en un directorio conocido por ejemplo en /root, con el siguiente comadno: git clone https://github.com/LorenaM22/zeek-weka.git
+Primero descargamos el repositorio en un directorio conocido por ejemplo en /root, con el siguiente comando: git clone https://github.com/LorenaM22/zeek-weka.git
 Así nos aparecerá en él un nuevo directorio llamado zeek-weka.
 
 Para realizar el cambio de log a csv, el fichero de zeek conn.log debe crearse con su formato por defecto y no con formato json. Por lo tanto, se deberá analizar los ficheros .pcap con el siguiente comando:  /opt/zeek/bin/zeek -r test.pcap -C
@@ -47,3 +47,5 @@ Campos de interes para Weka (información extraída de https://docs.zeek.org/en/
     If the event comes from the originator, the letter is in upper-case; if it comes from the responder, it’s in lower-case. 
   orig_pkts: paquetes de origen a destino
   resp_pkts: paquetes de destino a origen
+  
+  Si en vez de ejecutar el script zeek_to_csv.py se ejecuta zeek_to_csv_UTC.py, se tendrá un campo más al principio de cada fila que corresponde al campo ts en formato UTC. Pero se vuelve un programa muy lento.
