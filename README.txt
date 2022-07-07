@@ -3,11 +3,11 @@ obtenidos por zeek.
 Dentro de examples se encuentra ya un ejemplo realizado: el conn.log está parseado en out.csv con formato csv.
 
 Primero descargamos el repositorio en un directorio conocido por ejemplo en /root, con el siguiente comadno: git clone https://github.com/LorenaM22/zeek-weka.git
-Así nos aparecerá en él un nuevo directorio llamado ParseZeekLogs
+Así nos aparecerá en él un nuevo directorio llamado zeek-weka.
 
 Para realizar el cambio de log a csv, el fichero de zeek conn.log debe crearse con su formato por defecto y no con formato json. Por lo tanto, se deberá analizar los 
 ficheros .pcap con el siguiente comando:  /opt/zeek/bin/zeek -r test.pcap -C
-Y una vez obtenido el fichero conn.log nos situamos en su directorio y ejecutamos el siguiente comando: python3 /root/ParseZeekLogs/examples/zeek_to_csv.py conn.log
+Y una vez obtenido el fichero conn.log nos situamos en su directorio y ejecutamos el siguiente comando: python3 /root/zeek-weka/examples/zeek_to_csv.py conn.log
 Una vez ejecutado el comando se nos habrá creado en ese mismo directorio el fichero out.csv que contiene los siguientes campos de zeek:
 "ts", "uid","id.orig_h","id.orig_p","id.resp_h","id.resp_p", "proto", "duration", "orig_bytes", "resp_bytes", "conn_state", "local_orig", "local_resp", "missed_bytes", 
 "history", "orig_pkts", "orig_ip_bytes", "resp_pkts", "resp_ip_bytes"
