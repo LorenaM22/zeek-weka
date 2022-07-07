@@ -43,6 +43,7 @@ Campos de interes para Weka (información extraída de https://docs.zeek.org/en/
     w: packet with a zero window advertisement
     i: inconsistent packet (e.g. FIN+RST bits set)
     q: multi-flag packet (SYN+FIN or SYN+RST bits set)
-    ^: connection direction was flipped by Zeek’s heuristic
+    ^: connection direction was flipped by Zeek’s heuristic    
+    If the event comes from the originator, the letter is in upper-case; if it comes from the responder, it’s in lower-case. 
   orig_pkts: paquetes de origen a destino
   resp_pkts: paquetes de destino a origen
