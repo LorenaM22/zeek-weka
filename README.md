@@ -2,7 +2,7 @@ Extraido del repositorio dgunter/ParseZeekLogs, al que se le ha realizado una mo
 obtenidos por zeek.
 Dentro de examples se encuentra ya un ejemplo realizado: el conn.log está parseado en out.csv con formato csv.
 
-Primero descargamos el repositorio en un directorio conocido por ejemplo en /root, con el siguiente comadno: git clone https://github.com/LorenaM22/zeek-weka
+Primero descargamos el repositorio en un directorio conocido por ejemplo en /root, con el siguiente comadno: git clone https://github.com/LorenaM22/zeek-weka.git
 Así nos aparecerá en él un nuevo directorio llamado ParseZeekLogs
 
 Para realizar el cambio de log a csv, el fichero de zeek conn.log debe crearse con su formato por defecto y no con formato json. Por lo tanto, se deberá analizar los 
