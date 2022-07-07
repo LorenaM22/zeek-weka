@@ -3,12 +3,10 @@ Extraido del repositorio dgunter/ParseZeekLogs, al que se le ha realizado una mo
 Primero descargamos el repositorio en un directorio conocido por ejemplo en /root, con el siguiente comadno: git clone https://github.com/LorenaM22/zeek-weka.git
 Así nos aparecerá en él un nuevo directorio llamado zeek-weka.
 
-Para realizar el cambio de log a csv, el fichero de zeek conn.log debe crearse con su formato por defecto y no con formato json. Por lo tanto, se deberá analizar los 
-ficheros .pcap con el siguiente comando:  /opt/zeek/bin/zeek -r test.pcap -C
+Para realizar el cambio de log a csv, el fichero de zeek conn.log debe crearse con su formato por defecto y no con formato json. Por lo tanto, se deberá analizar los ficheros .pcap con el siguiente comando:  /opt/zeek/bin/zeek -r test.pcap -C
 Y una vez obtenido el fichero conn.log nos situamos en su directorio y ejecutamos el siguiente comando: python3 /root/zeek-weka/examples/zeek_to_csv.py conn.log
 Una vez ejecutado el comando se nos habrá creado en ese mismo directorio el fichero out.csv que contiene los siguientes campos de zeek:
-"ts", "uid","id.orig_h","id.orig_p","id.resp_h","id.resp_p", "proto", "duration", "orig_bytes", "resp_bytes", "conn_state", "local_orig", "local_resp", "missed_bytes", 
-"history", "orig_pkts", "orig_ip_bytes", "resp_pkts", "resp_ip_bytes"
+"ts", "uid","id.orig_h","id.orig_p","id.resp_h","id.resp_p", "proto", "duration", "orig_bytes", "resp_bytes", "conn_state", "local_orig", "local_resp", "missed_bytes", "history", "orig_pkts", "orig_ip_bytes", "resp_pkts", "resp_ip_bytes"
 
 (Si te aparece algún error de que falta algún modulo de elasticsearch simplemente ejecuta pip install elasticsearch para descargar el módulo y vuelve a intentarlo)
 
@@ -20,8 +18,7 @@ Campos de interes para Weka (información extraída de https://docs.zeek.org/en/
   conn_state (Posibles valores):
     S0: Connection attempt seen, no reply.
     S1: Connection established, not terminated.
-    SF: Normal establishment and termination. Note that this is the same symbol as for state S1. You can tell the two apart because for S1 there will not be any 
-    byte counts in the summary, while for SF there will be.
+    SF: Normal establishment and termination. Note that this is the same symbol as for state S1. You can tell the two apart because for S1 there will not be any byte counts in the summary, while for SF there will be.
     REJ: Connection attempt rejected.
     S2: Connection established and close attempt by originator seen (but no reply from responder).
     S3: Connection established and close attempt by responder seen (but no reply from originator).
