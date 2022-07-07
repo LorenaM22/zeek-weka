@@ -12,7 +12,7 @@ Una vez ejecutado el comando se nos habrá creado en ese mismo directorio el fic
 
 Campos de interes para Weka (información extraída de https://docs.zeek.org/en/master/scripts/base/protocols/conn/main.zeek.html#type-Conn::Info):
   ts: tiempo del primer paquete -> parsear a UTC
-  duration: cuanto ha durado la conexión (campo de tipo intervalo, comprobar que unidades tiene)
+  duration: cuanto ha durado la conexión (campo de tipo intervalo, sus unidades son segundos)
   orig_bytes: número de bytes de origen a destino
   resp_bytes: número de bytes de destino a origen
   conn_state (Posibles valores):
