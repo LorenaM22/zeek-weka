@@ -51,3 +51,4 @@ Campos de interes para Weka (información extraída de https://docs.zeek.org/en/
 Si en vez de ejecutar el script zeek_to_csv.py se ejecuta zeek_to_csv_UTC.py, se tendrá un campo más al principio de cada fila que corresponde al campo ts en formato UTC. Pero se vuelve un programa muy lento.
 
 En la carpeta json encontramos el script necesario para parsear ficheros log que contienen datos en formato json a un fichero csv. Para que ejecutar simplemente es necesario el siguiente comando: python3 json_to_csv.py conn.log
+Y si en su lugar ejecutamos json_to_csv_UTC.py aparecerá el campo ts en formato UTC en el fichero csv.
