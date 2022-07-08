@@ -82,6 +82,16 @@ function information(c: connection): OpenConnection::Info
 		if (c$conn?$duration){
 			rec$duration=c$conn$duration;
 		}
+		if (c$conn$id !in orig_bytes){
+			if(c$conn?$orig_bytes){
+				rec$orig_bytes=[c$conn$orig_bytes];
+			}
+		}
+		if (c$conn$id !in resp_bytes ){
+			if(c$conn?$resp_bytes){
+				rec$resp_bytes=[c$conn$resp_bytes];
+				}
+		}
 		if (c$conn$id in orig_bytes){
 			orig_bytes[c$conn$id]+=c$conn$orig_bytes;
 			rec$orig_bytes=orig_bytes[c$conn$id];
@@ -95,16 +105,6 @@ function information(c: connection): OpenConnection::Info
 			timing[c$conn$id]+=c$conn$duration;
 			rec$intervals=timing[c$conn$id];
 			delete timing[c$conn$id];
-		}
-		if (c$conn$id !in orig_bytes){
-			if(c$conn?$orig_bytes){
-				rec$orig_bytes=[c$conn$orig_bytes];
-			}
-		}
-		if (c$conn$id !in resp_bytes ){
-			if(c$conn?$resp_bytes){
-				rec$resp_bytes=[c$conn$resp_bytes];
-				}
 		}
 		if (c$conn?$conn_state){
 			rec$conn_state=c$conn$conn_state;
@@ -121,28 +121,28 @@ function information(c: connection): OpenConnection::Info
 		if (c$conn?$history){
 			rec$history=c$conn$history;
 		}
-		if (c$conn$id in orig_packets){
-			orig_packets[c$conn$id]+=c$conn$orig_pkts;
-			rec$orig_packets=orig_packets[c$conn$id];
-			delete orig_packets[c$conn$id];
-		}
 		if (c$conn$id !in orig_packets ){
 			if(c$conn?$orig_pkts){
 				rec$orig_packets=[c$conn$orig_pkts];
 			}
 		}
+		if (c$conn$id in orig_packets){
+			orig_packets[c$conn$id]+=c$conn$orig_pkts;
+			rec$orig_packets=orig_packets[c$conn$id];
+			delete orig_packets[c$conn$id];
+		}
 		if (c$conn?$orig_ip_bytes){
 			rec$orig_ip_bytes=c$conn$orig_ip_bytes;
-		}
-		if (c$conn$id in resp_packets ){
-			resp_packets[c$conn$id]+=c$conn$resp_pkts;	
-			rec$resp_packets=resp_packets[c$conn$id];
-			delete resp_packets[c$conn$id];
 		}
 		if (c$conn$id !in resp_packets ){
 			if(c$conn?$resp_pkts){
 				rec$resp_packets=[c$conn$resp_pkts];
 			}
+		}
+		if (c$conn$id in resp_packets ){
+			resp_packets[c$conn$id]+=c$conn$resp_pkts;	
+			rec$resp_packets=resp_packets[c$conn$id];
+			delete resp_packets[c$conn$id];
 		}
 		if (c$conn?$resp_ip_bytes){
 			rec$resp_ip_bytes=c$conn$resp_ip_bytes;
