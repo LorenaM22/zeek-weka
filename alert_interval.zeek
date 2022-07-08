@@ -83,10 +83,12 @@ function information(c: connection): OpenConnection::Info
 		if (c$conn$id in orig_bytes){
 			orig_bytes[c$conn$id]+=(c$conn$orig_bytes-orig_bytes[c$conn$id][|orig_bytes[c$conn$id]|-1]);
 			rec$orig_bytes=orig_bytes[c$conn$id];
+			delete orig_bytes[c$conn$id];
 		}
 		if (c$conn$id in resp_bytes){
 			resp_bytes[c$conn$id]+=(c$conn$resp_bytes-resp_bytes[c$conn$id][|resp_bytes[c$conn$id]|-1]);
 			rec$resp_bytes=resp_bytes[c$conn$id];
+			delete resp_bytes[c$conn$id];
 		}
 		if (c$conn$id !in orig_bytes){
 			rec$orig_bytes=[c$conn$orig_bytes];
@@ -112,6 +114,7 @@ function information(c: connection): OpenConnection::Info
 		if (c$conn$id in orig_packets){
 			orig_packets[c$conn$id]+=(c$conn$orig_pkts-orig_packets[c$conn$id][|orig_packets[c$conn$id]|-1]);
 			rec$orig_packets=orig_packets[c$conn$id];
+			delete orig_packets[c$conn$id];
 		}
 		if (c$conn$id !in orig_packets){
 			rec$orig_packets=[c$conn$orig_pkts];
@@ -122,6 +125,7 @@ function information(c: connection): OpenConnection::Info
 		if (c$conn$id in resp_packets){
 			resp_packets[c$conn$id]+=(c$conn$resp_pkts-resp_packets[c$conn$id][|resp_packets[c$conn$id]|-1]);	
 			rec$resp_packets=resp_packets[c$conn$id];
+			delete resp_packets[c$conn$id];
 		}
 		if (c$conn$id !in resp_packets){
 			rec$resp_packets=[c$conn$resp_pkts];
