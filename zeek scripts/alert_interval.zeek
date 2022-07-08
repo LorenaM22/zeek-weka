@@ -69,7 +69,7 @@ function information(c: connection): OpenConnection::Info
 
 		local rec: OpenConnection::Info ;
 			
-		rec$ts=c$conn$ts;
+		rec$ts=strftime("%Y-%m-%d %H:%M:%S",c$conn$ts);
 		rec$uid=c$conn$uid;
 		rec$orig_address=c$conn$id$orig_h;
 		rec$orig_port=c$conn$id$orig_p;
