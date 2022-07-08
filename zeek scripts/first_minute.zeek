@@ -13,7 +13,7 @@ export {
 			}
 }
 
-module Enrich_Conn;
+module First_Min;
 
 const ALERT_INTERVAL = 1min;
 
@@ -21,7 +21,7 @@ export {
 	redef enum Log::ID += { LOG };
 	
 	type Info: record{
-		ts:	time &log;
+		ts:	string &log;
 		uid:	string &log;
 		orig_address:	addr &log;
 		orig_port:	port &log;
@@ -44,6 +44,7 @@ export {
 		tunnel_parents:	set[string] &log;
 	
 	};
+	global finish: set[conn_id];
 	
 }
 
@@ -55,15 +56,15 @@ redef record connection += {
 
 event zeek_init() 
         {
-        Log::create_stream(LOG, [$columns=Enrich_Conn::Info, $path="enrich_conn"]);
+        Log::create_stream(LOG, [$columns=First_Min::Info, $path="first_minute"]);
         }
 
-function information(c: connection): Enrich_Conn::Info 
+function information(c: connection): First_Min::Info 
 	{
 
-		local rec: Enrich_Conn::Info;
+		local rec: First_Min::Info;
 		
-		rec$ts=c$conn$ts;
+		rec$ts=strftime("%Y-%m-%d %H:%M:%S",c$conn$ts);
 		rec$uid=c$conn$uid;
 		rec$orig_address=c$conn$id$orig_h;
 		rec$orig_port=c$conn$id$orig_p;
@@ -125,7 +126,7 @@ function long_callback(c: connection, cnt: count): interval
 				{
 					#print  "connection writted", c$id, c$duration;
 					Conn::set_conn_log_data_hack(c);
-			                Log::write(Enrich_Conn::LOG, information(c));
+			                Log::write(First_Min::LOG, information(c));
 							add finish[c$id];
 						return -1sec;
 				}
@@ -150,9 +151,6 @@ event connection_state_remove(c: connection)
 		else{
 			#print "end log conexion", c$id, c$duration;
 			Conn::set_conn_log_data_hack(c);
-			Log::write(Enrich_Conn::LOG, information(c));
+			Log::write(First_Min::LOG, information(c));
 		}
 	}
-
-
-
