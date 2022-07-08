@@ -22,7 +22,7 @@ export {
 	
 
 	type Info: record{
-		ts:	time &log;
+		ts:	string &log;
 		uid:	string &log;
 		orig_address:	addr &log;
 		orig_port:	port &log;
