@@ -61,7 +61,7 @@ redef record connection += {
 
 event zeek_init() 
         {
-        Log::create_stream(LOG, [$columns=Info, $path="open_conn"]);
+        Log::create_stream(LOG, [$columns=Info, $path="interval"]);
         }
 
 function information(c: connection): OpenConnection::Info 
