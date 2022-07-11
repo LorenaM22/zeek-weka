@@ -157,24 +157,32 @@ function keep(c: connection)
 
 		if (c$conn$id in orig_bytes){
 			if(c$conn?$orig_bytes){
+				if (c$conn$orig_bytes !in 	orig_bytes[c$conn$id]){
 					orig_bytes[c$conn$id]+=c$conn$orig_bytes;
 					timing[c$conn$id]+=c$conn$duration;
+				}
 			}
 		}
 		if (c$conn$id in resp_bytes){
 			if(c$conn?$resp_bytes){
+				if (c$conn$resp_bytes !in 	resp_bytes[c$conn$id]){
 					resp_bytes[c$conn$id]+=c$conn$resp_bytes;
 					timing[c$conn$id]+=c$conn$duration;
+				}
 			}
 		}
 		if (c$conn$id in orig_packets){
 			if(c$conn?$orig_pkts){
+				if (c$conn$orig_pkts !in 	orig_packets[c$conn$id]){
 					orig_packets[c$conn$id]+=c$conn$orig_pkts;
+				}
 			}
 		}
 		if (c$conn$id in resp_packets ){
 			if(c$conn?$resp_pkts){
+				if (c$conn$resp_pkts !in 	resp_packets[c$conn$id]){
 					resp_packets[c$conn$id]+=c$conn$resp_pkts;
+				}
 			}
 		}
 		if (c$conn$id !in orig_bytes){
