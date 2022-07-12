@@ -65,4 +65,4 @@ Dentro de la carpeta zeek script encontramos los scripts personalizados de zeek:
   * per_packet_dif.zeek realiza lo mismo que el script per_packet.zeek pero este tiene dos vectorres, intervals_orig e intervals_resp para saber el tiempo de separación entre paquetes en cada uno de los sentidos -> archivo per_packet_dif.log
   * per_packet_enrich.zeek realiza lo mismo que el script per_packet_dif.zeek pero enriquece la información con datos sobre los nombres DNS, la conexión SSL y los certificados x509 usados -> archivo per_packet_enrich.log 
     * !! Los scripts per_packet generan algo extraño porque se detecta un nuevo paquete de una conexión (event new_packet), pero siempre se indica al principio que no se han enviado paquetes porque en los campos resp_pkts y orig_pkts empiezan en 0
- (Los ficheros log de salida aportan el campo ts en formato UTC)
+- (Los ficheros log de salida aportan el campo ts en formato UTC)
