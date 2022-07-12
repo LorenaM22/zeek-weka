@@ -172,62 +172,116 @@ function information(c: connection): OpenConnection::Info
 
 function keep(c: connection)
 	{
-
-		if (c$conn$id in orig_bytes){
-			if(c$conn?$orig_bytes){
-				if (c$conn$orig_bytes !in 	orig_bytes[c$conn$id]){
-					orig_bytes[c$conn$id]+=c$conn$orig_bytes;
-					timing_orig[c$conn$id]+=c$conn$duration;
-				}
-			}
-		}
-		if (c$conn$id in resp_bytes){
-			if(c$conn?$resp_bytes){
-				if (c$conn$resp_bytes !in 	resp_bytes[c$conn$id]){
-					resp_bytes[c$conn$id]+=c$conn$resp_bytes;
-					timing_resp[c$conn$id]+=c$conn$duration;
-				}
-			}
-		}
+		
 		if (c$conn$id in orig_packets){
 			if(c$conn?$orig_pkts){
 				if (c$conn$orig_pkts !in 	orig_packets[c$conn$id]){
 					orig_packets[c$conn$id]+=c$conn$orig_pkts;
+					if (c$conn$id in orig_bytes){
+						if(c$conn?$orig_bytes){
+								orig_bytes[c$conn$id]+=c$conn$orig_bytes;
+								timing_orig[c$conn$id]+=c$conn$duration;
+						}
+						else{
+							orig_bytes[c$conn$id]+=0;
+							timing_orig[c$conn$id]+=0secs;						
+						}
+					}
+					else{
+						if(c$conn?$orig_bytes){
+							orig_bytes[c$conn$id]=[c$conn$orig_bytes];
+							timing_orig[c$conn$id]=[c$conn$duration];
+						}
+						else{
+							orig_bytes[c$conn$id]=[0];
+							timing_orig[c$conn$id]=[0secs];						
+						}
+					}
 				}
 			}
 		}
+		else{
+			if(c$conn?$orig_pkts){
+				orig_packets[c$conn$id]=[c$conn$orig_pkts];
+				if (c$conn$id in orig_bytes){
+					if(c$conn?$orig_bytes){
+						orig_bytes[c$conn$id]+=c$conn$orig_bytes;
+						timing_orig[c$conn$id]+=c$conn$duration;
+					}
+					else{
+						orig_bytes[c$conn$id]+=0;
+						timing_orig[c$conn$id]+=0secs;
+					}
+				}
+				else{
+					if(c$conn?$orig_bytes){
+						orig_bytes[c$conn$id]=[c$conn$orig_bytes];
+						timing_orig[c$conn$id]=[c$conn$duration];
+					}
+					else{
+						orig_bytes[c$conn$id]=[0];
+						timing_orig[c$conn$id]=[0secs];
+					}
+				}
+			}
+		}
+		
 		if (c$conn$id in resp_packets ){
 			if(c$conn?$resp_pkts){
 				if (c$conn$resp_pkts !in 	resp_packets[c$conn$id]){
 					resp_packets[c$conn$id]+=c$conn$resp_pkts;
+					if (c$conn$id in resp_bytes){
+						if(c$conn?$resp_bytes){
+								resp_bytes[c$conn$id]+=c$conn$resp_bytes;
+								timing_resp[c$conn$id]+=c$conn$duration;
+						}
+						else{
+								resp_bytes[c$conn$id]+=0;
+								timing_resp[c$conn$id]+=0.0secs;
+						}
+					}
+					else{
+						if(c$conn?$resp_bytes){
+							resp_bytes[c$conn$id]=[c$conn$resp_bytes];
+							timing_resp[c$conn$id]=[c$conn$duration];
+						}
+						else{
+							resp_bytes[c$conn$id]=[0];
+							timing_resp[c$conn$id]=[0.0secs];
+						}
+					}
 				}
 			}
 		}
-		if (c$conn$id !in orig_bytes){
-			if(c$conn?$orig_bytes){
-				orig_bytes[c$conn$id]=[c$conn$orig_bytes];
-				timing_orig[c$conn$id]=[c$conn$duration];
-			}
-		}
-		if (c$conn$id !in resp_bytes ){
-			if(c$conn?$resp_bytes){
-				resp_bytes[c$conn$id]=[c$conn$resp_bytes];
-				timing_resp[c$conn$id]=[c$conn$duration];
-				}
-		}
-	
-		if (c$conn$id !in orig_packets ){
-			if(c$conn?$orig_pkts){
-				orig_packets[c$conn$id]=[c$conn$orig_pkts];
-			}
-		}
-	
-		if (c$conn$id !in resp_packets ){
+		else{
 			if(c$conn?$resp_pkts){
 				resp_packets[c$conn$id]=[c$conn$resp_pkts];
+				if (c$conn$id in resp_bytes){
+					if(c$conn?$resp_bytes){
+							resp_bytes[c$conn$id]+=c$conn$resp_bytes;
+							timing_resp[c$conn$id]+=c$conn$duration;
+					}
+					else{
+							resp_bytes[c$conn$id]+=0;
+							timing_resp[c$conn$id]+=0.0secs;
+					}
+				}
+				else{
+					if(c$conn?$resp_bytes){
+						resp_bytes[c$conn$id]=[c$conn$resp_bytes];
+						timing_resp[c$conn$id]=[c$conn$duration];
+					}
+					else{
+						resp_bytes[c$conn$id]=[0];
+						timing_resp[c$conn$id]=[0.0secs];
+					}
+				}
 			}
-		}
+		}	
 	}
+
+
+
 
 
 event new_packet(c: connection, p: pkt_hdr){
