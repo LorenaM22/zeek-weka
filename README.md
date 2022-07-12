@@ -13,7 +13,9 @@ Una vez ejecutado el comando se nos habrá creado en ese mismo directorio el fic
  
 Si en vez de ejecutar el script zeek_to_csv.py se ejecuta zeek_to_csv_UTC.py, se tendrá un campo más al principio de cada fila que corresponde al campo ts en formato UTC. Pero se vuelve un programa muy lento.
 
-### Campos de interes para Weka (información extraída de https://docs.zeek.org/en/master/scripts/base/protocols/conn/main.zeek.html#type-Conn::Info):
+### Campos de interes para Weka 
+(Información extraída de https://docs.zeek.org/en/master/scripts/base/protocols/conn/main.zeek.html#type-Conn::Info):
+
   * ts: tiempo del primer paquete -> parsear a UTC
   * duration: cuanto ha durado la conexión (campo de tipo intervalo, sus unidades son segundos)
   * orig_bytes: número de bytes de origen a destino
