@@ -56,9 +56,9 @@ export {
 		deviceCustomNumber5:	interval &log;
 		deviceCustomNumber5Label: string &default="connection duration"    &log;
 		deviceCustomNumber6:	vector of count &log;
-		deviceCustomNumber6Label: string &default="bytes from source"    &log;
+		deviceCustomNumber6Label: string &default="payload bytes from source"    &log;
 		deviceCustomNumber7: vector of count &log;
-		deviceCustomNumber7Label: string &default="bytes from destination"    &log;
+		deviceCustomNumber7Label: string &default="payload bytes from destination"    &log;
 		deviceCustomString21:	string &log;
 		deviceCustomString21Label: string &default= "connection state"   &log;
 		deviceCustomBool4:	bool &log;
