@@ -31,29 +31,29 @@ export {
 		protocol:	string &log;
 		service:	string &log ;
 		duration:	interval &log;
-		orig_bytes:	vector of count &log;
-		resp_bytes: vector of count &log;
+		orig_bytes:	string &log;
+		resp_bytes:string &log;
 		conn_state:	string &log;
 		local_orig:	bool &log;
 		local_resp: bool &log;
 		missed_bytes: count &log;
 		history:	string &log;
-		orig_packets:	vector of count &log;
+		orig_packets:	string &log;
 		orig_ip_bytes:	count &log;
-		resp_packets:	vector of count &log;
+		resp_packets:	string &log;
 		resp_ip_bytes:	count &log;
 		tunnel_parents:	set[string] &log;
-		intervals_orig: vector of interval &log;
-		intervals_resp: vector of interval &log;
+		intervals_orig: string &log;
+		intervals_resp: string &log;
 	
 	};
 	
-	global timing_orig: table[conn_id] of vector of interval= table() &create_expire=1 day;
-	global timing_resp: table[conn_id] of vector of interval= table() &create_expire=1 day;
-	global orig_bytes: table[conn_id] of vector of count= table() &create_expire=1 day;
-	global resp_bytes: table[conn_id] of vector of count= table() &create_expire=1 day;
-	global orig_packets: table[conn_id] of vector of count= table() &create_expire=1 day;
-	global resp_packets: table[conn_id] of vector of count= table() &create_expire=1 day;
+	global timing_orig: table[conn_id] of vector of string= table() &create_expire=1 day;
+	global timing_resp: table[conn_id] of vector of string= table() &create_expire=1 day;
+	global orig_bytes: table[conn_id] of vector of string= table() &create_expire=1 day;
+	global resp_bytes: table[conn_id] of vector of string= table() &create_expire=1 day;
+	global orig_packets: table[conn_id] of vector of string= table() &create_expire=1 day;
+	global resp_packets: table[conn_id] of vector of string= table() &create_expire=1 day;
 
 }
 redef record connection += {
@@ -87,39 +87,39 @@ function information(c: connection): OpenConnection::Info
 		
 		if (c$conn$id !in timing_orig ){
 			if(c$conn?$duration){
-				rec$intervals_orig=[c$conn$duration];
+				rec$intervals_orig=cat(c$conn$duration);
 			}
 		}
 		if (c$conn$id in timing_orig){
-				rec$intervals_orig=timing_orig[c$conn$id];
+				rec$intervals_orig=join_string_vec(timing_orig[c$conn$id], "-");
 				delete timing_orig[c$conn$id];
 		}
 		if (c$conn$id !in timing_resp ){
 			if(c$conn?$duration){
-				rec$intervals_resp=[c$conn$duration];
+				rec$intervals_resp=cat(c$conn$duration);
 			}
 		}
 		if (c$conn$id in timing_resp){
-				rec$intervals_resp=timing_resp[c$conn$id];
+				rec$intervals_resp=join_string_vec(timing_resp[c$conn$id], "-");
 				delete timing_resp[c$conn$id];
 		}
 		
 		if (c$conn$id !in orig_bytes){
 			if(c$conn?$orig_bytes){
-				rec$orig_bytes=[c$conn$orig_bytes];
+				rec$orig_bytes=cat(c$conn$orig_bytes);
 			}
 		}
 		if (c$conn$id !in resp_bytes ){
 			if(c$conn?$resp_bytes){
-				rec$resp_bytes=[c$conn$resp_bytes];
+				rec$resp_bytes=cat(c$conn$resp_bytes);
 			}
 		}
 		if (c$conn$id in orig_bytes){
-				rec$orig_bytes=orig_bytes[c$conn$id];
+				rec$orig_bytes=join_string_vec(orig_bytes[c$conn$id], "-");
 				delete orig_bytes[c$conn$id];
 		}
 		if (c$conn$id in resp_bytes){
-			rec$resp_bytes=resp_bytes[c$conn$id];
+			rec$resp_bytes=join_string_vec(resp_bytes[c$conn$id], "-");
 				delete resp_bytes[c$conn$id];
 			
 		}
@@ -140,11 +140,11 @@ function information(c: connection): OpenConnection::Info
 		}
 		if (c$conn$id !in orig_packets ){
 			if(c$conn?$orig_pkts){
-				rec$orig_packets=[c$conn$orig_pkts];
+				rec$orig_packets=cat(c$conn$orig_pkts);
 			}
 		}
 		if (c$conn$id in orig_packets){
-			rec$orig_packets=orig_packets[c$conn$id];
+			rec$orig_packets=join_string_vec(orig_packets[c$conn$id], "-");
 			delete orig_packets[c$conn$id];
 		}
 		if (c$conn?$orig_ip_bytes){
@@ -152,11 +152,11 @@ function information(c: connection): OpenConnection::Info
 		}
 		if (c$conn$id !in resp_packets ){
 			if(c$conn?$resp_pkts){
-				rec$resp_packets=[c$conn$resp_pkts];
+				rec$resp_packets=cat(c$conn$resp_pkts);
 			}
 		}
 		if (c$conn$id in resp_packets ){
-			rec$resp_packets=resp_packets[c$conn$id];
+			rec$resp_packets=join_string_vec(resp_packets[c$conn$id], "-");
 			delete resp_packets[c$conn$id];
 		}
 		if (c$conn?$resp_ip_bytes){
@@ -176,25 +176,25 @@ function keep(c: connection)
 		if (c$conn$id in orig_packets){
 			if(c$conn?$orig_pkts){
 				if (c$conn$orig_pkts !in 	orig_packets[c$conn$id]){
-					orig_packets[c$conn$id]+=c$conn$orig_pkts;
+					orig_packets[c$conn$id]+=cat(c$conn$orig_pkts);
 					if (c$conn$id in orig_bytes){
 						if(c$conn?$orig_bytes){
-								orig_bytes[c$conn$id]+=c$conn$orig_bytes;
-								timing_orig[c$conn$id]+=c$conn$duration;
+								orig_bytes[c$conn$id]+=cat(c$conn$orig_bytes);
+								timing_orig[c$conn$id]+=cat(c$conn$duration);
 						}
 						else{
-							orig_bytes[c$conn$id]+=0;
-							timing_orig[c$conn$id]+=0secs;						
+							orig_bytes[c$conn$id]+=cat(0);
+							timing_orig[c$conn$id]+=cat(0.0secs);						
 						}
 					}
 					else{
 						if(c$conn?$orig_bytes){
-							orig_bytes[c$conn$id]=[c$conn$orig_bytes];
-							timing_orig[c$conn$id]=[c$conn$duration];
+							orig_bytes[c$conn$id]=[cat(c$conn$orig_bytes)];
+							timing_orig[c$conn$id]=[cat(c$conn$duration)];
 						}
 						else{
-							orig_bytes[c$conn$id]=[0];
-							timing_orig[c$conn$id]=[0secs];						
+							orig_bytes[c$conn$id]=[cat(0)];
+							timing_orig[c$conn$id]=[cat(0.0secs)];						
 						}
 					}
 				}
@@ -202,25 +202,25 @@ function keep(c: connection)
 		}
 		else{
 			if(c$conn?$orig_pkts){
-				orig_packets[c$conn$id]=[c$conn$orig_pkts];
+				orig_packets[c$conn$id]=[cat(c$conn$orig_pkts)];
 				if (c$conn$id in orig_bytes){
 					if(c$conn?$orig_bytes){
-						orig_bytes[c$conn$id]+=c$conn$orig_bytes;
-						timing_orig[c$conn$id]+=c$conn$duration;
+						orig_bytes[c$conn$id]+=cat(c$conn$orig_bytes);
+						timing_orig[c$conn$id]+=cat(c$conn$duration);
 					}
 					else{
-						orig_bytes[c$conn$id]+=0;
-						timing_orig[c$conn$id]+=0secs;
+						orig_bytes[c$conn$id]+=cat(0);
+						timing_orig[c$conn$id]+=cat(0.0secs);
 					}
 				}
 				else{
 					if(c$conn?$orig_bytes){
-						orig_bytes[c$conn$id]=[c$conn$orig_bytes];
-						timing_orig[c$conn$id]=[c$conn$duration];
+						orig_bytes[c$conn$id]=[cat(c$conn$orig_bytes)];
+						timing_orig[c$conn$id]=[cat(c$conn$duration)];
 					}
 					else{
-						orig_bytes[c$conn$id]=[0];
-						timing_orig[c$conn$id]=[0secs];
+						orig_bytes[c$conn$id]=[cat(0)];
+						timing_orig[c$conn$id]=[cat(0.0secs)];
 					}
 				}
 			}
@@ -229,25 +229,25 @@ function keep(c: connection)
 		if (c$conn$id in resp_packets ){
 			if(c$conn?$resp_pkts){
 				if (c$conn$resp_pkts !in 	resp_packets[c$conn$id]){
-					resp_packets[c$conn$id]+=c$conn$resp_pkts;
+					resp_packets[c$conn$id]+=cat(c$conn$resp_pkts);
 					if (c$conn$id in resp_bytes){
 						if(c$conn?$resp_bytes){
-								resp_bytes[c$conn$id]+=c$conn$resp_bytes;
-								timing_resp[c$conn$id]+=c$conn$duration;
+								resp_bytes[c$conn$id]+=cat(c$conn$resp_bytes);
+								timing_resp[c$conn$id]+=cat(c$conn$duration);
 						}
 						else{
-								resp_bytes[c$conn$id]+=0;
-								timing_resp[c$conn$id]+=0.0secs;
+								resp_bytes[c$conn$id]+=cat(0);
+								timing_resp[c$conn$id]+=cat(0.0secs);
 						}
 					}
 					else{
 						if(c$conn?$resp_bytes){
-							resp_bytes[c$conn$id]=[c$conn$resp_bytes];
-							timing_resp[c$conn$id]=[c$conn$duration];
+							resp_bytes[c$conn$id]=[cat(c$conn$resp_bytes)];
+							timing_resp[c$conn$id]=[cat(c$conn$duration)];
 						}
 						else{
-							resp_bytes[c$conn$id]=[0];
-							timing_resp[c$conn$id]=[0.0secs];
+							resp_bytes[c$conn$id]=[cat(0)];
+							timing_resp[c$conn$id]=[cat(0.0secs)];
 						}
 					}
 				}
@@ -255,31 +255,30 @@ function keep(c: connection)
 		}
 		else{
 			if(c$conn?$resp_pkts){
-				resp_packets[c$conn$id]=[c$conn$resp_pkts];
+				resp_packets[c$conn$id]=[cat(c$conn$resp_pkts)];
 				if (c$conn$id in resp_bytes){
 					if(c$conn?$resp_bytes){
-							resp_bytes[c$conn$id]+=c$conn$resp_bytes;
-							timing_resp[c$conn$id]+=c$conn$duration;
+							resp_bytes[c$conn$id]+=cat(c$conn$resp_bytes);
+							timing_resp[c$conn$id]+=cat(c$conn$duration);
 					}
 					else{
-							resp_bytes[c$conn$id]+=0;
-							timing_resp[c$conn$id]+=0.0secs;
+							resp_bytes[c$conn$id]+=cat(0);
+							timing_resp[c$conn$id]+=cat(0.0secs);
 					}
 				}
 				else{
 					if(c$conn?$resp_bytes){
-						resp_bytes[c$conn$id]=[c$conn$resp_bytes];
-						timing_resp[c$conn$id]=[c$conn$duration];
+						resp_bytes[c$conn$id]=[cat(c$conn$resp_bytes)];
+						timing_resp[c$conn$id]=[cat(c$conn$duration)];
 					}
 					else{
-						resp_bytes[c$conn$id]=[0];
-						timing_resp[c$conn$id]=[0.0secs];
+						resp_bytes[c$conn$id]=[cat(0)];
+						timing_resp[c$conn$id]=[cat(0.0secs)];
 					}
 				}
 			}
 		}	
 	}
-
 
 
 
