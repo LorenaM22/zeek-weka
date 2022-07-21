@@ -118,7 +118,6 @@ export {
 	
 	global dns_server:set[addr] &create_expire=1 day; 
 	
-	
 	global cert509: table[conn_id] of Certs=table() &create_expire=1 day;
 
 	global ssl: table [addr] of vector of string= table() &create_expire=1 day;
@@ -308,6 +307,55 @@ event dns_A_reply (c: connection, msg: dns_msg, ans: dns_answer, a: addr){
 	
 	add dns_server[c$id$resp_h];#almaceno en un vector los servidores dns (IP) de los que recibo respuesta
 	#las ips que se encuentren en este vector luego nos permitiran decir que el servidor es conocido
+}
+
+event x509_certificate (f: fa_file, cert_ref: opaque of x509, cert: X509::Certificate)
+{	
+	local a:conn_id;
+	local certificado: Enrich_Conn::Certs;
+	for ([a] in f$conns){
+		
+		certificado$certificate_version= f$conns[a]$ssl$cert_chain[0]$x509$certificate$version;
+		certificado$certificate_serial= f$conns[a]$ssl$cert_chain[0]$x509$certificate$serial;
+		certificado$certificate_subject= f$conns[a]$ssl$cert_chain[0]$x509$certificate$subject;
+		certificado$certificate_issuer= f$conns[a]$ssl$cert_chain[0]$x509$certificate$issuer;
+		certificado$certificate_cn= f$conns[a]$ssl$cert_chain[0]$x509$certificate$cn;
+		certificado$certificate_not_valid_before= f$conns[a]$ssl$cert_chain[0]$x509$certificate$not_valid_before;
+		certificado$certificate_not_valid_after= f$conns[a]$ssl$cert_chain[0]$x509$certificate$not_valid_after;
+		certificado$certificate_key_alg= f$conns[a]$ssl$cert_chain[0]$x509$certificate$key_alg;
+		certificado$certificate_sig_alg= f$conns[a]$ssl$cert_chain[0]$x509$certificate$sig_alg;
+		certificado$certificate_key_type= f$conns[a]$ssl$cert_chain[0]$x509$certificate$key_type;
+		certificado$certificate_key_len= f$conns[a]$ssl$cert_chain[0]$x509$certificate$key_length;
+		certificado$certificate_exponent= f$conns[a]$ssl$cert_chain[0]$x509$certificate$exponent;
+		
+		if (f$conns[a]$ssl$cert_chain[0]$x509$certificate?$curve){
+			certificado$certificate_curve= f$conns[a]$ssl$cert_chain[0]$x509$certificate$curve;
+			}
+		if(f$conns[a]$ssl$cert_chain[0]$x509?$san){
+			if(f$conns[a]$ssl$cert_chain[0]$x509$san?$dns){
+				certificado$san_dns= f$conns[a]$ssl$cert_chain[0]$x509$san$dns;
+				}
+			if(f$conns[a]$ssl$cert_chain[0]$x509$san?$uri){
+				certificado$san_uri= f$conns[a]$ssl$cert_chain[0]$x509$san$uri;
+				}
+			if(f$conns[a]$ssl$cert_chain[0]$x509$san?$email){
+				certificado$san_email= f$conns[a]$ssl$cert_chain[0]$x509$san$email;
+				}
+			if(f$conns[a]$ssl$cert_chain[0]$x509$san?$ip){
+				certificado$san_ip= f$conns[a]$ssl$cert_chain[0]$x509$san$ip;
+			}
+		}
+		if(f$conns[a]$ssl$cert_chain[0]$x509?$basic_constraints){	
+			if(f$conns[a]$ssl$cert_chain[0]$x509$basic_constraints?$ca){
+				certificado$basic_constraints_ca= f$conns[a]$ssl$cert_chain[0]$x509$basic_constraints$ca;
+				}
+			if(f$conns[a]$ssl$cert_chain[0]$x509$basic_constraints?$path_len){
+				certificado$basic_constrainst_path_len= f$conns[a]$ssl$cert_chain[0]$x509$basic_constraints$path_len;
+			}
+		}
+		
+		cert509[a]= certificado;
+		}
 }
 
 event new_connection(c: connection)
