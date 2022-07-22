@@ -45,7 +45,7 @@ function long_callback(c: connection, cnt: count): interval
 				{
 					#print  "connection writted", c$id, c$duration;
 					Conn::set_conn_log_data_hack(c);
-			                Log::write(OpenConnection::LOG, c$conn);
+			                Log::write(First_Min::LOG, c$conn);
 						return -1sec;
 				}
 			else
@@ -66,8 +66,8 @@ event connection_state_remove(c: connection)
 	{
 		if ( c$duration < ALERT_INTERVAL )
 				{
-					#print  "connection writted", c$id, c$duration;
+					print  "connection writted", c$id, c$duration;
 					Conn::set_conn_log_data_hack(c);
-			                Log::write(OpenConnection::LOG, c$conn);
+			                Log::write(First_Min::LOG, c$conn);
 				}
 }
