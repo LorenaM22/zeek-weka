@@ -47,7 +47,7 @@ export {
 		sourceAddress: addr &log;
 		destinationPort: port &log;
 		sourcePort: port &log;
-		startTime: time &log;
+		startTime: string &log;
 		deviceCustomString19:	string &log;
 		deviceCustomString19Label: string &default= "protocol" &log;
 		
@@ -144,7 +144,7 @@ function information(c: connection): Enrich_Conn::Info
 	rec$sourceAddress=c$id$orig_h;
 	rec$destinationPort=c$id$resp_p;
 	rec$sourcePort=c$id$orig_p;
-	rec$startTime=c$start_time;
+	rec$startTime=strftime("%Y-%m-%d %H:%M:%S",c$conn$ts);
 	
 	rec$deviceCustomString19=cat(c$conn$proto);
 		
@@ -267,25 +267,6 @@ event ssl_established (c: connection){
 	}
 	
 }
-function long_callback(c: connection, cnt: count): interval
-        {
-
-			if ( c$duration >= ALERT_INTERVAL )
-				{
-					#print  "connection writted", c$id, c$duration;
-					Conn::set_conn_log_data_hack(c);
-			                Log::write(Enrich_Conn::LOG, information(c));
-						return -1sec;
-				}
-			else
-				{
-					#print  "connection not writted", c$id, c$duration;
-						return ALERT_INTERVAL - c$duration;
-				}
-		
-        }
-
-
 
 event dns_A_reply (c: connection, msg: dns_msg, ans: dns_answer, a: addr){
     
@@ -357,6 +338,26 @@ event x509_certificate (f: fa_file, cert_ref: opaque of x509, cert: X509::Certif
 		cert509[a]= certificado;
 		}
 }
+
+function long_callback(c: connection, cnt: count): interval
+        {
+
+			if ( c$duration >= ALERT_INTERVAL )
+				{
+					#print  "connection writted", c$id, c$duration;
+					Conn::set_conn_log_data_hack(c);
+			                Log::write(Enrich_Conn::LOG, information(c));
+						return -1sec;
+				}
+			else
+				{
+					#print  "connection not writted", c$id, c$duration;
+						return ALERT_INTERVAL - c$duration;
+				}
+		
+        }
+
+
 
 event new_connection(c: connection)
         {
